@@ -2,7 +2,7 @@ var pages = [
     { title: 'Login', description: '로그인 페이지', directory: 'LoginPage' },
 ]
 
-var container = document.getElementById('container');
+var container = document.getElementById('card-container');
 var cards = pages.map(page => {
     return `<div class="card">
         <div class="card-image">
