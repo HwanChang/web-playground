@@ -1,5 +1,6 @@
 var pages = [
     { title: 'Login', description: '로그인 페이지', directory: 'LoginPage' },
+    { title: 'Rotate', description: '반응형 카드', directory: 'ReactiveCard' },
 ]
 
 var container = document.getElementById('card-container');
