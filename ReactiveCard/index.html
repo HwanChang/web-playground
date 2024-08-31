@@ -29,7 +29,7 @@
         height: 310px;
         position: relative;
         transform-style: preserve-3d;
-        transition: transform 1.2s ease-in-out;
+        transition: transform 0.6s ease-in-out;
       }
 
       .front, .back {
@@ -58,27 +58,28 @@
 </head>
 <body>
 <div class="container">
-    <div id="1" class="card">
+    <div class="card">
         <div class="front"></div>
         <div class="back"></div>
     </div>
-    <div id="2" class="card">
+    <div class="card">
         <div class="front"></div>
         <div class="back"></div>
     </div>
-    <div id="3" class="card">
+    <div class="card">
         <div class="front"></div>
         <div class="back"></div>
     </div>
-    <div id="4" class="card">
+    <div class="card">
         <div class="front"></div>
         <div class="back"></div>
     </div>
-    <div id="5" class="card">
+    <div class="card">
         <div class="front"></div>
         <div class="back"></div>
     </div>
 </div>
+</body>
 <script>
     let currentEnlargedCard = null;
 
@@ -91,7 +92,8 @@
 
         card.style.zIndex = '10';
         card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(2) rotateY(180deg)`;
-        card.classList.add('flipping');
+        card.classList.add('flipping', 'flipped');
+        card.style.pointerEvents = 'auto';
     }
 
     function unflipCard(card) {
@@ -99,7 +101,8 @@
         setTimeout(() => {
             card.classList.remove('flipping', 'flipped');
             card.style.zIndex = '';
-        }, 1200);
+            card.style.pointerEvents = '';
+        }, 600);
     }
 
     function handleCardClick(e) {
@@ -114,7 +117,12 @@
             flipCard(card);
             setTimeout(() => {
                 card.classList.add('flipped');
-            }, 1200);
+            }, 600);
+            document.querySelectorAll('.card').forEach(c => {
+                if (c !== card) {
+                    c.style.pointerEvents = 'auto';
+                }
+            });
 
             currentEnlargedCard = card;
         }
@@ -124,6 +132,9 @@
     function handleDocumentClick(e) {
         if (currentEnlargedCard && !currentEnlargedCard.contains(e.target)) {
             unflipCard(currentEnlargedCard);
+            document.querySelectorAll('.card').forEach(c => {
+                c.style.pointerEvents = 'auto';
+            });
             currentEnlargedCard = null;
         }
     }
@@ -132,7 +143,35 @@
         card.addEventListener('click', handleCardClick);
     });
 
+    document.querySelectorAll('.front').forEach(front => {
+        front.addEventListener('mousemove', function (e) {
+            const rect = front.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            console.log(x, y);
+            const rotateY = -1 / 5 * x + 20;
+            const rotateX = 4 / 30 * y - 20;
+
+            front.style.transform = `perspective(350px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        front.addEventListener('mouseout', function () {
+            front.style.transform = 'perspective(350px) rotateY(0deg) rotateX(0deg)';
+        });
+    });
+
+    document.querySelectorAll('.back').forEach(back => {
+        back.addEventListener('mousemove', function (e) {
+            const rect = back.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateY = -1 / 11 * x + 20 - 180;
+            const rotateX = -2 / 31 * y + 20;
+
+            back.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+    });
+
     document.addEventListener('click', handleDocumentClick);
 </script>
-</body>
 </html>
