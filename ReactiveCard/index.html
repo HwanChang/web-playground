@@ -147,7 +147,6 @@
             const rect = front.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            console.log(x, y);
             const rotateY = -1 / 5 * x + 20;
             const rotateX = 4 / 30 * y - 20;
 
@@ -168,6 +167,10 @@
             const rotateX = -2 / 31 * y + 20;
 
             back.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        back.addEventListener('mouseout', function () {
+            back.style.transform = 'rotateY(180deg) rotateX(0deg)';
         });
     });
 
